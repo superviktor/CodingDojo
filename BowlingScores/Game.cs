@@ -23,7 +23,6 @@ namespace BowlingScores
                 var prev = GetPevious(turns, i);
                 if (IsStrike(prev))
                 {
-
                     additionalScore += GetAdditionalWhenStrike(turns[i], i+1>9?null:turns[i+1]);
                 }
                 else if (IsSpare(prev))
@@ -60,6 +59,10 @@ namespace BowlingScores
                 if (IsStrike(nextNext))
                 {
                     additional += 10;
+                }
+                if (nextNext == null)
+                {
+                    additional += next.SecondThrow.Score;
                 }
             }
             else

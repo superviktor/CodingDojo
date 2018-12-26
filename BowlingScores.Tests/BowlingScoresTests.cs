@@ -65,6 +65,13 @@ namespace BowlingScores.Tests
             Assert.AreEqual(240, scores);
         }
 
+        [TestMethod]
+        public void GetScores_PerfetGame()
+        {
+            var scores = _game.GetScores("[10,0],[10,0],[10,0],[10,0],[10,0],[10,0],[10,0],[10,0],[10,0],[10,10,10]");
+            Assert.AreEqual(300, scores);
+        }
+
         [TestCleanup]
         public void Clean()
         {
