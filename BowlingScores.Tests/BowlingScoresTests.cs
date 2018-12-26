@@ -58,6 +58,13 @@ namespace BowlingScores.Tests
             Assert.AreEqual(122, scores);
         }
 
+        [TestMethod]
+        public void GetScores_Nine_Strikes_Followed_By_A_Gutter_Ball()
+        {
+            var scores = _game.GetScores("[10,0],[10,0],[10,0],[10,0],[10,0],[10,0],[10,0],[10,0],[10,0],[0,0]");
+            Assert.AreEqual(240, scores);
+        }
+
         [TestCleanup]
         public void Clean()
         {

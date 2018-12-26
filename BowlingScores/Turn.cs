@@ -18,5 +18,7 @@ namespace BowlingScores
         {
             return FirstThrow.Score + SecondThrow.Score;
         }
+
+
     }
 }
