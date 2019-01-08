@@ -18,20 +18,43 @@ namespace BowlingScores
         {
             var turns = _throwParser.Parse(input);
             var additionalScore = 0;
+            var sum = 0;
+            var turnScore = 0;
             for (int i = 0; i < turns.Count; i++)
             {
-                var prev = GetPevious(turns, i);
-                if (IsStrike(prev))
-                {
-                    additionalScore += GetAdditionalWhenStrike(turns[i], i+1>9?null:turns[i+1]);
-                }
-                else if (IsSpare(prev))
-                {
-                    additionalScore += turns[i].FirstThrow.Score;
-                }
                
+                //var prev = GetPevious(turns, i);
+                if (IsStrike(turns[i]))
+                {
+                    //additionalScore += GetAdditionalWhenStrike(turns[i], i+1>9?null:turns[i+1]);
+                    turnScore = turns[i].GetScores() + additionalScore;
+                    var next = i + 1 > 9 ? null : turns[i + 1];
+                    // make this also strike
+                    var nextNext = i + 2 > 9 ? null : turns[i + 2];
+                    var strike = new Strike(next, nextNext)
+                    {
+                        FirstThrow = turns[i].FirstThrow,
+                        SecondThrow = turns[i].SecondThrow,
+                        ThirdThrow = turns[i].ThirdThrow
+                    };
+                    turnScore = strike.GetScores();
+                }
+                else if (IsSpare(turns[i]))
+                {
+                    var spare = new Spare(i + 1 > 9 ? null : turns[i + 1]) {
+                        FirstThrow = turns[i].FirstThrow,
+                        SecondThrow = turns[i].SecondThrow,
+                        ThirdThrow = turns[i].ThirdThrow
+                    };   
+                    turnScore = spare.GetScores();
+                }
+                else
+                {
+                    turnScore = turns[i].GetScores();
+                }
+                sum += turnScore;
             }
-            var sum = turns.ToList().Sum(x => x.FirstThrow.Score + x.SecondThrow.Score + (x.ThirdThrow?.Score ?? 0));
+            // turns.ToList().Sum(x => x.FirstThrow.Score + x.SecondThrow.Score + (x.ThirdThrow?.Score ?? 0));
             return sum + additionalScore ;
         }
 
@@ -50,27 +73,6 @@ namespace BowlingScores
             return currentIndex <= 0 ? null : turns[currentIndex - 1];
         }
 
-        private int GetAdditionalWhenStrike(Turn next, Turn nextNext)
-        {
-            int additional = 0;
-            if (IsStrike(next))
-            {
-                additional += 10;
-                if (IsStrike(nextNext))
-                {
-                    additional += 10;
-                }
-                if (nextNext == null)
-                {
-                    additional += next.SecondThrow.Score;
-                }
-            }
-            else
-            {
-                additional += next.GetScores();
-            }
-            return additional;
-
-        }
+       
     }
 }

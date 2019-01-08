@@ -14,9 +14,9 @@ namespace BowlingScores
 
         public  Throw ThirdThrow { get; set; }
 
-        public int GetScores()
+        public virtual int GetScores()
         {
-            return FirstThrow.Score + SecondThrow.Score;
+            return FirstThrow.Score + SecondThrow.Score + (ThirdThrow != null ? ThirdThrow.Score : 0);
         }
 
 
